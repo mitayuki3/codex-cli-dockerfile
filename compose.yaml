@@ -1,0 +1,11 @@
+services:
+  codex:
+    build: .
+    image: codex-cli
+    entrypoint: ["/root/.local/bin/codex"]
+    stdin_open: true
+    tty: true
+    working_dir: /workspace
+    network_mode: host
+    volumes:
+      - ${HOME}/.codex/auth.json:/root/.codex/auth.json

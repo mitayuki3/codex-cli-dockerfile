@@ -1,8 +1,14 @@
-FROM node:22-slim
-RUN apt-get update && apt-get install -y \
+FROM debian:trixie-slim
+RUN apt-get update && apt-get install -y --no-install-recommends \
+    ca-certificates \
+    curl \
     git \
-    && apt-get clean \
+    procps \
     && rm -rf /var/lib/apt/lists/*
-RUN npm install -g @openai/codex
+ENV CODEX_HOME=/root/.codex
+ENV PATH=/root/.local/bin:$PATH
+RUN curl -fsSL https://chatgpt.com/codex/install.sh | sh \
+    && test -x /root/.local/bin/codex \
+    && /root/.local/bin/codex --version
 WORKDIR /workspace
-ENTRYPOINT ["codex"]
+ENTRYPOINT ["/root/.local/bin/codex"]
